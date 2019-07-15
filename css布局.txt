@@ -1,0 +1,195 @@
+                         CSS布局 ——从display，position， float属性谈起
+  块级元素：p ul form div h
+  行内元素：span input a
+  这两者主要区别就是块级元素会从上到下一个个垂直排列，每个自占一行，如下即使两个div之间
+没任何元素，绿色的div仍然会显示在hongsediv下方，而不是右方
+<div style="height: 100px; width: 100px; background-color: Red;">
+    </div>
+    <div style="height: 100px; width: 100px; background-color: Green;">
+    </div>
+   而行内元素在一行中水平排列，行内元素的高度由其内容撑开，不可显示的设置其高度，
+这就是为什么我们一次次的在span上设置height属性不好使的原因。
+
+display常用的几个属性：
+  none:此元素不会被显示。
+  block:此元素将显示为块级元素，此元素前后会带有换行符。
+  inline:此元素会被显示为内联元素，元素前后没有换行符。
+  inline-block:行内块元素。（CSS2.1 新增的值）
+
+要想了解CSS元素定位就需要了解position属性了，position属性有几个常用值如下:
+  inhert:规定应该从父元素继承 position 属性的值。
+  static:默认值。没有定位，元素出现在正常的流中（忽略 top, bottom, left, right 
+                 或者 z-index 声明）。
+  relative:生成相对定位的元素，相对于元素本身正常位置进行定位。
+           因此，"left:20" 会向元素的left位置添加20像素。
+  absolute:生成绝对定位的元素，相对于 static 定位以外的第一个祖先元素进行定位。元素的位置
+           通过"left" "top" "right" "bottom"属性进行规定。
+  fixed:生成绝对定位的元素，相对于浏览器窗口进行定位。元素的位置
+        通过"left" "top" "right" "bottom"属性进行规定。
+CSS有三种基本的定位机制：普通流，浮动和绝对定位
+    普通流是默认定位方式，在普通流中元素框的位置由元素在html中的位置决定，元素position属性
+  为static或继承来的static时就会按照普通流定位，这也是我们最常见的方式。
+    相对定位比较简单，对应position属性的relative值，如果对一个元素进行相对定位，它将出现在
+  他所在的位置上，然后可以通过设置垂直或水平位置，让这个元素相对于它自己移动，在使用相对定位时，
+  无论元素是否移动，元素在文档流中占据原来空间，只是表现会改变。
+普通流：
+<div style="border: solid 1px #0e0; width:200px;">
+        <div style="height: 100px; width: 100px; background-color: Red;">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Green;">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Red;">
+        </div>
+    </div>
+    
+相对定位：
+<div style="border: solid 1px #0e0; width:200px;">
+        <div style="height: 100px; width: 100px; background-color: Red;">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Green; position:relative; top:20px; left:20px;">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Red;">
+        </div>
+    </div>
+    对绿色div进行相对定位，分别右移，下移20px后第二个红色div位置并没有相应变化，而是在原位置，
+绿色div遮挡住了部分红色div。
+
+    相对定位可以看作特殊的普通流定位，元素位置是相对于他在普通流中位置发生变化，而绝对定位
+使元素的位置与文档流无关，也不占据文档流空间，普通流中的元素布局就像绝对定位元素不存在一样。
+    绝对定位的元素的位置是相对于距离他最近的非static祖先元素位置决定的。如果元素没有已定位的
+祖先元素，那么他的位置就相对于初始包含块儿（body或html神马的）元素。因为绝对定位与文档流无关，
+所以绝对定位的元素可以覆盖页面上的其他元素，可以通过z-index属性控制叠放顺序，z-index越高，
+元素位置越靠上。 
+绝对定位：
+    <div style="border: solid 1px #0e0; width:200px; position:relative;">
+        <div style="height: 100px; width: 100px; background-color: Red;">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Green; position:absolute; top:20px; left:20px;">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Yellow;">
+        </div>
+    </div>
+绿色div是相对于父元素，也就是绿框div进行的移位，而红色和黄色div进行布局时就像绿色div不存在一样。
+    
+    应用fixed也叫固定定位，固定定位是绝对定位的中，固定定位的元素也不包含在普通文档流中，
+差异是苦丁元素的包含块儿是视口（viewport），经常见一些页面的如人人网看在线好友那个模块总在
+窗口右下角，估计用的是类似技术  
+固定定位：
+<div style="border: solid 1px #0e0; width:200px;">
+        <div style="height: 100px; width: 100px; background-color: Red;">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Green; position:fixed; bottom:20px; left:20px;">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Yellow;">
+        </div>
+    </div>
+    可见hongse和黄色div布局没有受到绿色div影响，而无论是页面纵向滚动条在页面顶端还是底端，
+绿色div总是在视口左下角
+
+float浮动:
+    浮动模型也是一种可视化格式模型，浮动的框可以左右移动（根据float属性值而定），直到它的
+外边缘碰到包含框或者另一个浮动元素的框的边缘。浮动元素不在文档的普通流中，文档的普通流中的
+元素表现的就像浮动元素不存在一样.
+不浮动 
+<div style="border: solid 5px #0e0; width:300px;">
+        <div style="height: 100px; width: 100px; background-color: Red;">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Green; ">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Yellow;">
+        </div>
+    </div>
+//红向右浮动
+<div style="border: solid 5px #0e0; width:300px;">
+        <div style="height: 100px; width: 100px; background-color: Red; float:right;">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Green; ">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Yellow;">
+        </div>
+    </div>
+//红框左移,覆盖绿框 
+<div style="border: solid 5px #0e0; width:300px;">
+        <div style="height: 100px; width: 100px; background-color: Red;  float:left;">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Green;">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Yellow;">
+        </div>
+    </div>
+//都向左浮动,父元素宽度为0
+ <div style="border: solid 5px #0e0; width:300px;">
+        <div style="height: 100px; width: 100px; background-color: Red;  float:left;">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Green;  float:left;">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Yellow;  float:left;">
+        </div>
+    </div>
+  如果包含块儿太窄无法容纳水平排列的三个浮动元素,那么其它浮动块儿向下移动,,直到有足够的扣减,
+如果浮动元素的高度不同,那么下下移动的时候可能被卡住
+没有足够水平空间  
+<div style="border: solid 5px #0e0; width:250px;">
+        <div style="height: 100px; width: 100px; background-color: Red;  float:left;">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Green;  float:left;">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Yellow;  float:left;">
+        </div>
+    </div>
+卡住了
+<div style="border: solid 5px #0e0; width:250px;">
+        <div style="height: 120px; width: 100px; background-color: Red;  float:left;">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Green;  float:left;">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Yellow;  float:left;">
+        </div>
+    </div>
+
+行框和清理
+    前面指出浮动会让元素脱离文档流,不影响不浮动元素.实际上并不完全如此,如果浮动的元素后面有
+一个文档流中元素,那么这个元素的框会表现的像浮动元素不存在,但是框的文本内容会受到浮动元素的
+影响,会移动以留出空间.用术语说就是浮动元素旁边的行框被缩短,从而给浮动元素流出空间,因而行框
+围绕浮动框。
+不浮动  
+<div style="border: solid 5px #0e0; width: 250px;">
+        <div style="height: 50px; width: 50px; background-color: Red;"></div>
+        <div style="height: 100px; width: 100px; background-color: Green;">
+           11111111111
+        </div>
+    </div>
+浮动
+ <div style="border: solid 5px #0e0; width: 250px;">
+        <div style="height: 50px; width: 50px; background-color: Red; float:left;"></div>
+        <div style="height: 100px; width: 100px; background-color: Green;">
+           11111111111
+        </div>
+    </div>
+可以看出浮动后虽然绿色div布局不受浮动影响，正常布局，但是文字部分却被挤到了红色浮动div下边。
+要想阻止行框围绕在浮动元素外边，可以使用clear属性，属性的left，right，both，none表示框的
+哪些边不挨着浮动框。
+<div style="border: solid 5px #0e0; width: 250px;">
+        <div style="height: 50px; width: 50px; background-color: Red; float:left;"></div>
+        <div style="height: 100px; width: 100px; background-color: Green; clear:both;">
+           11111111111
+        </div>
+    </div>
+    对元素清理实际上为前面的浮动元素留出了垂直空间,这样可以解决我们之前的一个问题，看前面的
+图片的时候我们发现div内的所有元素浮动的话就会不占据文档空间，这样父元素，高度为0，可能很多
+效果也不见了
+如果我们想让父元素在视觉上包围浮动元素可以向下面这样处理
+在最后添加一个空div，对它清理
+<div style="border: solid 5px #0e0; width:300px;">
+        <div style="height: 100px; width: 100px; background-color: Red;  float:left;">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Green;  float:left;">
+        </div>
+        <div style="height: 100px; width: 100px; background-color: Yellow;  float:left;">
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+当然这样做有很多缺点，有些javascript也可以做出类似效果，这里不细说，值得注意的是应用值为
+hidden或auto的overflow属性会有一个副作用：自动清理包含的任何浮动元素，所以说当页面出现
+相关问题时，可以看看是不是这个属性搞的鬼。
+
